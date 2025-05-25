@@ -1,0 +1,160 @@
+const { body, validationResult } = require("express-validator");
+
+// --------------- Film validation  -----------------------
+exports.createFilmValidation = [
+  body("titre")
+    .notEmpty()
+    .withMessage("Le titre est requis")
+    .isLength({ min: 2 })
+    .withMessage("Le titre doit contenir au moins 2 caractères"),
+
+  body("description")
+    .notEmpty()
+    .withMessage("La description est requise")
+    .isLength({ min: 10 })
+    .withMessage("La description doit contenir au moins 10 caractères"),
+
+  body("post_url")
+    .notEmpty()
+    .withMessage("L’URL du poster est requise")
+    .isURL()
+    .withMessage("L’URL du poster doit être une URL valide"),
+
+  body("genre")
+    .isArray({ min: 1 })
+    .withMessage("Le genre doit être un tableau contenant au moins un élément")
+    .custom((value) => value.every((g) => typeof g === "string"))
+    .withMessage("Chaque genre doit être une chaîne de caractères"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+exports.updateFilmValidation = [
+  body("titre")
+    .optional()
+    .isLength({ min: 2 })
+    .withMessage("Le titre doit contenir au moins 2 caractères"),
+
+  body("description")
+    .optional()
+    .isLength({ min: 10 })
+    .withMessage("La description doit contenir au moins 10 caractères"),
+
+  body("post_url")
+    .optional()
+    .isURL()
+    .withMessage("L’URL du poster doit être une URL valide"),
+
+  body("genre")
+    .optional()
+    .isArray({ min: 1 })
+    .withMessage("Le genre doit être un tableau contenant au moins un élément")
+    .custom((value) => value.every((g) => typeof g === "string"))
+    .withMessage("Chaque genre doit être une chaîne de caractères"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------- Séance Validation  --------------------------------------------
+exports.seanceValidation = [
+  body("film_id")
+    .notEmpty()
+    .withMessage("Le film_id est requis")
+    .isInt()
+    .withMessage("Le film_id doit être un entier"),
+
+  body("salle_id")
+    .notEmpty()
+    .withMessage("Le salle_id est requis")
+    .isInt()
+    .withMessage("Le salle_id doit être un entier"),
+
+  body("date")
+    .notEmpty()
+    .withMessage("La date est requise")
+    .isISO8601()
+    .withMessage("La date doit être au format valide (YYYY-MM-DD)"),
+
+  body("heure_debut")
+    .notEmpty()
+    .withMessage("L'heure de début est requise")
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("L'heure de début doit être au format HH:mm"),
+
+  body("heure_fin")
+    .notEmpty()
+    .withMessage("L'heure de fin est requise")
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("L'heure de fin doit être au format HH:mm"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+exports.updateSeanceValidation = [
+  body("film_id")
+    .optional()
+    .isInt()
+    .withMessage("Le film_id doit être un entier"),
+
+  body("salle_id")
+    .optional()
+    .isInt()
+    .withMessage("Le salle_id doit être un entier"),
+
+  body("date")
+    .optional()
+    .isISO8601()
+    .withMessage("La date doit être au format valide (YYYY-MM-DD)"),
+
+  body("heure_debut")
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("L'heure de début doit être au format HH:mm"),
+
+  body("heure_fin")
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("L'heure de fin doit être au format HH:mm"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+// -------------------------------------------------------------------------------------

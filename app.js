@@ -2,6 +2,7 @@ const express = require("express");
 const { Sequelize } = require("sequelize");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const FilmRouter = require("./routes/film.routes");
 const app = express();
 
 // middlewares pour analyser les requêtes HTTP
@@ -12,7 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // middlewares pour les routes
 
-//
+// films routes
+app.use("api/v1/films", FilmRouter);
 
 // connexion à la base de donnée
 const sequelize = new Sequelize(process.env.DB_URL, {

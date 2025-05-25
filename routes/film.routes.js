@@ -7,13 +7,17 @@ const {
   deleteFilmById,
 } = require("../controllers/film.controller.js");
 const { isAdmin } = require("../middlewares/admin.middleware.js");
+const {
+  createFilmValidation,
+  updateFilmValidation,
+} = require("../middlewares/validation.middleware.js");
 
-const router = express.Router();
+const FilmRouter = express.Router();
 
-router.get("/", isAdmin, getAllFilms);
-router.get("/:id", isAdmin, getFilmById);
-router.post("/", isAdmin, createFilm);
-router.put("/:id", isAdmin, updateFilm);
-router.delete("/:id", isAdmin, deleteFilmById);
+FilmRouter.get("/", isAdmin, getAllFilms);
+FilmRouter.get("/:id", isAdmin, getFilmById);
+FilmRouter.post("/", isAdmin, createFilmValidation, createFilm);
+FilmRouter.put("/:id", isAdmin, updateFilmValidation, updateFilm);
+FilmRouter.delete("/:id", isAdmin, deleteFilmById);
 
-module.exports = router;
+module.exports = FilmRouter;
