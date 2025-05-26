@@ -19,3 +19,5 @@ seanceRouter.get("/:id", isAdmin, getSeanceById);
 seanceRouter.post("/", isAdmin, seanceValidation, createSeance);
 seanceRouter.put("/:id", isAdmin, updateSeanceValidation, updateSeanceById);
 seanceRouter.delete("/:id", isAdmin, deleteSeanceById);
+
+module.exports = seanceRouter;

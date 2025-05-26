@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Film",
+      tableName: "Films",
       underscored: true,
       timestamps: true,
     }

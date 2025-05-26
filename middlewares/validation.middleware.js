@@ -158,3 +158,61 @@ exports.updateSeanceValidation = [
 ];
 
 // -------------------------------------------------------------------------------------
+// ------------------------------- auth validation  -------------------------------------------
+
+exports.registerValidator = [
+  body("nom")
+    .notEmpty()
+    .withMessage("Le nom est requis")
+    .isLength({ min: 2 })
+    .withMessage("Le nom doit avoir au moins 2 caractères"),
+
+  body("email")
+    .notEmpty()
+    .withMessage("L'email est requis")
+    .isEmail()
+    .withMessage("Format d'email invalide"),
+
+  body("mot_de_passe")
+    .notEmpty()
+    .withMessage("Le mot de passe est requis")
+    .isLength({ min: 5 })
+    .withMessage("Le mot de passe doit avoir au moins 5 caractères"),
+
+  body("role")
+    .optional()
+    .isIn(["user", "admin"])
+    .withMessage("Le rôle doit être 'user' ou 'admin'"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+exports.loginValidator = [
+  body("email")
+    .notEmpty()
+    .withMessage("L'email est requis")
+    .isEmail()
+    .withMessage("Format d'email invalide"),
+
+  body("mot_de_passe").notEmpty().withMessage("Le mot de passe est requis"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({
+        success: false,
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
