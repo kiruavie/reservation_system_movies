@@ -32,7 +32,7 @@ module.exports = {
         allowNull: false,
       },
       statut: {
-        type: Sequelize.ENUM("en attente", "confirmé", "annulé"),
+        type: Sequelize.ENUM("en attente", "confirmée", "annulée"),
         defaultValue: "en attente",
         allowNull: false,
       },

@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
 
+      this.belongsToMany(models.Siege, {
+        through: models.ReservationSiege,
+        foreignKey: "reservation_id",
+        as: "sieges",
+      });
+
       this.belongsTo(models.Seance, {
         foreignKey: "seance_id",
         as: "seance",
@@ -35,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       seance_id: { type: DataTypes.INTEGER, allowNull: false },
       date_reservation: { type: DataTypes.DATE, allowNull: false },
       statut: {
-        type: DataTypes.ENUM("en attente", "confirmé", "annulé"),
+        type: DataTypes.ENUM("en attente", "confirmée", "annulée"),
         defaultValue: "en attente",
         allowNull: false,
       },

@@ -1,8 +1,8 @@
 // CRUD SEANCES
 const db = require("../models");
-const Seances = db.Seances;
-// create seance
+const Seance = db.Seance;
 
+// create seance
 exports.createSeance = async (req, res) => {
   try {
     const { film_id, salle_id, date, heure_debut, heure_fin } = req.body;
@@ -10,7 +10,7 @@ exports.createSeance = async (req, res) => {
     if (!film_id || !salle_id || !date || !heure_debut || !heure_fin) {
       return res.status(400).json("Tous les champs sont réquis");
     }
-    const newSeance = await Seances.create({
+    const newSeance = await Seance.create({
       film_id,
       salle_id,
       date,
@@ -37,7 +37,7 @@ exports.createSeance = async (req, res) => {
 exports.getSeanceById = async (req, res) => {
   try {
     const { id } = req.params;
-    const seance = await Seances.findByPk(id);
+    const seance = await Seance.findByPk(id);
 
     if (!seance) {
       return res.status(404).json("La séance est introuvable");
@@ -60,7 +60,7 @@ exports.getSeanceById = async (req, res) => {
 // obtenir toutes les séances
 exports.getAllSeances = async (req, res) => {
   try {
-    const seances = await Seances.findAll({
+    const seances = await Seance.findAll({
       include: ["film", "salle"],
     });
 
@@ -84,7 +84,7 @@ exports.updateSeanceById = async (req, res) => {
   try {
     const { id } = req.params;
     const { film_id, salle_id, date, heure_debut, heure_fin } = req.body;
-    const seance = await Seances.findByPk(id);
+    const seance = await Seance.findByPk(id);
 
     if (!seance) {
       return res.status(404).json("La séance est introuvable");
@@ -118,7 +118,7 @@ exports.updateSeanceById = async (req, res) => {
 exports.deleteSeanceById = async (req, res) => {
   try {
     const { id } = req.params;
-    const seance = await Seances.findByPk(id);
+    const seance = await Seance.findByPk(id);
 
     if (!seance) {
       return res.status(404).json("séance introuvable");

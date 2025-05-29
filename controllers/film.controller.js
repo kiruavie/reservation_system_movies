@@ -1,5 +1,5 @@
 const db = require("../models");
-const Films = db.Films;
+const Film = db.Film;
 
 // Créer un film (admin)
 
@@ -17,7 +17,7 @@ exports.createFilm = async (req, res) => {
         message: "Le genre doit être un tableau de chaîne",
       });
     }
-    const newFilm = await Films.create({ titre, description, post_url, genre });
+    const newFilm = await Film.create({ titre, description, post_url, genre });
 
     res.status(201).json({
       success: true,
@@ -37,7 +37,7 @@ exports.createFilm = async (req, res) => {
 // obtenir tous les films (admin)
 exports.getAllFilms = async (req, res) => {
   try {
-    const films = await Films.findAll({
+    const films = await Film.findAll({
       order: [["created_at", "DESC"]],
     });
     res.status(200).json({
@@ -55,12 +55,48 @@ exports.getAllFilms = async (req, res) => {
   }
 };
 
+// Voir les films et leurs séances par date (user)
+
+exports.getFilmsWithSeancesByDate = async (req, res) => {
+  try {
+    const { date } = req.query;
+
+    if (!date) {
+      return res.status(400).json({ message: "La date est requise" });
+    }
+
+    const films = await Film.findAll({
+      include: {
+        model: Seance,
+        as: "seances",
+        where: db.sequelize.where(
+          db.sequelize.fn("DATE", db.sequelize.col("seances.date")),
+          date
+        ),
+        required: false, // pour inclure les films même s'ils n'ont pas de séance ce jour-là
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: films,
+    });
+  } catch (error) {
+    console.error("Erreur getFilmsWithSeancesByDate:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erreur de serveur",
+      error: error.message,
+    });
+  }
+};
+
 // obtenir un film en particulier (admin)
 
 exports.getFilmById = async (req, res) => {
   try {
     const { id } = req.params;
-    const film = await Films.findByPk(id);
+    const film = await Film.findByPk(id);
 
     if (!film) {
       return res
@@ -85,7 +121,7 @@ exports.updateFilm = async (req, res) => {
     const { id } = req.params;
     const { titre, description, post_url, genre } = req.body;
 
-    const film = await Films.findByPk(id);
+    const film = await Film.findByPk(id);
 
     if (!film) {
       return res
@@ -120,7 +156,7 @@ exports.updateFilm = async (req, res) => {
 exports.deleteFilmById = async (req, res) => {
   try {
     const { id } = req.params;
-    const film = await Films.findByPk(id);
+    const film = await Film.findByPk(id);
 
     if (!film) {
       return res
