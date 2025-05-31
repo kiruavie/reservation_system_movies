@@ -6,6 +6,7 @@ const FilmRouter = require("./routes/film.routes");
 const seanceRouter = require("./routes/seance.routes");
 const authRouter = require("./routes/auth.routes");
 const ReservationRouter = require("./routes/reservation.routes");
+const SiegeRouter = require("./routes/siege.routes");
 const app = express();
 
 // middlewares pour analyser les requêtes HTTP
@@ -27,6 +28,9 @@ app.use("/api/v1/auth", authRouter);
 
 // reservation routes
 app.use("/api/v1/reservations", ReservationRouter);
+
+// sieges routes
+app.use("/api/v1/sieges", SiegeRouter);
 
 // connexion à la base de donnée
 const sequelize = new Sequelize(process.env.DB_URL, {

@@ -24,7 +24,7 @@ exports.createSeance = async (req, res) => {
       data: newSeance,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Erreur getAllFilmsGroupedByGenre:", error);
     res.status(500).json({
       success: false,
       message: "Erreur du serveur",

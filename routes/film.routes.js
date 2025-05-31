@@ -16,7 +16,7 @@ const { isAuth } = require("../middlewares/auth.middleware.js");
 
 const FilmRouter = express.Router();
 
-FilmRouter.get("/", isAdmin, getAllFilms);
+FilmRouter.get("/all", isAdmin, getAllFilms);
 FilmRouter.get("/:id", isAdmin, getFilmById);
 FilmRouter.post("/", isAdmin, createFilmValidation, createFilm);
 FilmRouter.put("/:id", isAdmin, updateFilmValidation, updateFilm);

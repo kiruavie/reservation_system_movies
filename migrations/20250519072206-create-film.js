@@ -26,6 +26,14 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: false,
       },
+      duree: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          min: 1, // en minutes
+        },
+      },
+
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

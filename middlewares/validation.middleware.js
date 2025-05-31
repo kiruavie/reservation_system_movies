@@ -26,6 +26,12 @@ exports.createFilmValidation = [
     .custom((value) => value.every((g) => typeof g === "string"))
     .withMessage("Chaque genre doit être une chaîne de caractères"),
 
+  body("duree")
+    .notEmpty()
+    .withMessage("La durée est requise")
+    .isInt({ min: 1, max: 600 })
+    .withMessage("La durée doit être un entier entre 1 et 600 minutes"),
+
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -60,6 +66,13 @@ exports.updateFilmValidation = [
     .withMessage("Le genre doit être un tableau contenant au moins un élément")
     .custom((value) => value.every((g) => typeof g === "string"))
     .withMessage("Chaque genre doit être une chaîne de caractères"),
+
+  body("duree")
+    .optional()
+    .notEmpty()
+    .withMessage("La durée est requise")
+    .isInt({ min: 1, max: 600 })
+    .withMessage("La durée doit être un entier entre 1 et 600 minutes"),
 
   (req, res, next) => {
     const errors = validationResult(req);

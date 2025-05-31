@@ -4,3 +4,5 @@ const { isAuth } = require("../middlewares/auth.middleware");
 const SiegeRouter = express.Router();
 
 SiegeRouter.get("/", isAuth, getSiegesDisponibles);
+
+module.exports = SiegeRouter;

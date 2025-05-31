@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
 
       Film.hasMany(models.Seance, {
         foreignKey: "film_id",
+        as: "seances",
+        onDelete: "CASCADE",
       });
     }
   }
@@ -21,6 +23,13 @@ module.exports = (sequelize, DataTypes) => {
       description: { type: DataTypes.STRING, allowNull: false },
       post_url: { type: DataTypes.STRING },
       genre: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: false },
+      duree: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+          min: 1, // en minutes
+        },
+      },
     },
     {
       sequelize,

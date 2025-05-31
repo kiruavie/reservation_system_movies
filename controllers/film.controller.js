@@ -1,13 +1,14 @@
 const db = require("../models");
 const Film = db.Film;
+const Seance = db.Seance;
 
 // Créer un film (admin)
 
 exports.createFilm = async (req, res) => {
   try {
-    const { titre, description, post_url, genre } = req.body;
+    const { titre, description, post_url, genre, duree } = req.body;
 
-    if (!titre || !description || !post_url || !genre) {
+    if (!titre || !description || !post_url || !genre || !duree) {
       return res.status(400).json("Tous les champs sont réquis");
     }
 
@@ -17,7 +18,13 @@ exports.createFilm = async (req, res) => {
         message: "Le genre doit être un tableau de chaîne",
       });
     }
-    const newFilm = await Film.create({ titre, description, post_url, genre });
+    const newFilm = await Film.create({
+      titre,
+      description,
+      post_url,
+      genre,
+      duree: duree || "90",
+    });
 
     res.status(201).json({
       success: true,
@@ -40,10 +47,18 @@ exports.getAllFilms = async (req, res) => {
     const films = await Film.findAll({
       order: [["created_at", "DESC"]],
     });
+
+    // grouper par genre
+    const grouped = {};
+    films.forEach((film) => {
+      const genre = film.genre || "Inconnue";
+      if (!grouped[genre]) grouped[genre] = [];
+      grouped[genre].push(film);
+    });
     res.status(200).json({
       success: true,
       message: "Tous les films disponibles",
-      data: films,
+      data: grouped,
     });
   } catch (error) {
     console.error(error);
@@ -119,7 +134,7 @@ exports.getFilmById = async (req, res) => {
 exports.updateFilm = async (req, res) => {
   try {
     const { id } = req.params;
-    const { titre, description, post_url, genre } = req.body;
+    const { titre, description, post_url, genre, duree } = req.body;
 
     const film = await Film.findByPk(id);
 
@@ -134,6 +149,7 @@ exports.updateFilm = async (req, res) => {
       description,
       post_url,
       genre,
+      duree,
     });
 
     res.status(200).json({
