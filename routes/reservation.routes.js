@@ -16,7 +16,7 @@ ReservationRouter.get("/me", isAuth, getAllReservations);
 ReservationRouter.get("/all", isAuth, isAdmin, getAllReservations);
 
 // Routes avec paramètres dynamiques ensuite
-ReservationRouter.post("/:id", isAuth, createReservation);
+ReservationRouter.post("/", isAuth, createReservation);
 ReservationRouter.get("/:id", isAuth, getReservationById);
 ReservationRouter.delete("/:id", isAuth, isAdmin, deleteReservation);
 ReservationRouter.patch(

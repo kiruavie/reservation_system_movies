@@ -20,10 +20,11 @@ exports.createReservation = async (req, res) => {
       include: [
         {
           model: Reservation,
+          as: "reservation",
           where: { seance_id },
         },
       ],
-      where: { sieges_id: { [Op.in]: sieges } },
+      where: { siege_id: { [Op.in]: sieges } },
     });
 
     if (siegesDejaReserves.length > 0) {
