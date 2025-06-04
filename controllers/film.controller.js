@@ -70,15 +70,10 @@ exports.getAllFilms = async (req, res) => {
   }
 };
 
-// Voir les films et leurs séances par date (user)
-
 exports.getFilmsWithSeancesByDate = async (req, res) => {
   try {
-    const { date } = req.query;
-
-    if (!date) {
-      return res.status(400).json({ message: "La date est requise" });
-    }
+    // Si aucune date n'est fournie, on prend la date actuelle
+    const date = req.query.date || new Date().toISOString().split("T")[0]; // format YYYY-MM-DD
 
     const films = await Film.findAll({
       include: {
