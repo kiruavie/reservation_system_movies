@@ -195,7 +195,7 @@ exports.cancelReservation = async (req, res) => {
       include: {
         model: Seance,
         as: "seance",
-        attributes: ["date"],
+        attributes: ["heure_debut"],
       },
     });
 
