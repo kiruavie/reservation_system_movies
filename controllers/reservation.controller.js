@@ -186,7 +186,6 @@ exports.cancelReservation = async (req, res) => {
   try {
     const reservationId = req.params.id;
 
-    // Récupérer la réservation avec la séance liée
     const reservation = await Reservation.findOne({
       where: {
         id: reservationId,
@@ -195,7 +194,7 @@ exports.cancelReservation = async (req, res) => {
       include: {
         model: Seance,
         as: "seance",
-        attributes: ["heure_debut"],
+        attributes: ["heure_debut", "heure_fin"],
       },
     });
 
@@ -204,9 +203,19 @@ exports.cancelReservation = async (req, res) => {
     }
 
     const now = new Date();
-    const dateSeance = new Date(reservation.seance.date);
-    const diffHeures = (dateSeance - now) / (1000 * 60 * 60); // millisecondes → heures
+    const heureDebut = new Date(reservation.seance.heure_debut);
+    const heureFin = new Date(reservation.seance.heure_fin);
 
+    // Séance déjà terminée ?
+    if (now > heureFin) {
+      return res.status(400).json({
+        success: false,
+        message: "Cette séance est déjà passée, annulation impossible.",
+      });
+    }
+
+    // Moins de 2h avant la séance ?
+    const diffHeures = (heureDebut - now) / (1000 * 60 * 60);
     if (diffHeures < 2) {
       return res.status(400).json({
         success: false,
